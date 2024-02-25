@@ -2,7 +2,8 @@
 该系统服务于消息通信，支持多端登录，主要是可以实现好友、群会话之间的消息通信，当然也提供了好友在线状态的显示、好友分组等功能，主要模块可分为用户模块、好友模块、群组模块、消息模块。
 上述代码是服务端代码，包括即时通讯系统（网关服务、业务服务、异步存储服务）和APP服务代码，之间的关系我画了个简图（有点丑）： 
 
-![无标题](https://github.com/koxumeiqi/xc-im-system/assets/114217632/6c2c7b7e-9f87-4756-82f0-118ee5adc0fd)
+![image](https://github.com/koxumeiqi/xc-im-system/assets/114217632/7ca11c4a-a3ce-4243-9875-b2f5cc2db9d5)
+
 
 
 技术栈：SpringBoot、OpenFeign、Netty、RabbitMQ、Mybatis、Redis、Zookeeper、MySQL
