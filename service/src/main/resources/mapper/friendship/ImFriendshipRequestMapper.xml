@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xcpowernode.im.service.friendship.dao.ImFriendshipRequestMapper">
+  <resultMap id="BaseResultMap" type="com.xcpowernode.im.service.friendship.entity.ImFriendshipRequest">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="app_id" jdbcType="INTEGER" property="appId" />
+    <result column="from_id" jdbcType="VARCHAR" property="fromId" />
+    <result column="to_id" jdbcType="VARCHAR" property="toId" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="read_status" jdbcType="INTEGER" property="readStatus" />
+    <result column="add_source" jdbcType="VARCHAR" property="addSource" />
+    <result column="add_wording" jdbcType="VARCHAR" property="addWording" />
+    <result column="approve_status" jdbcType="INTEGER" property="approveStatus" />
+    <result column="create_time" jdbcType="BIGINT" property="createTime" />
+    <result column="update_time" jdbcType="BIGINT" property="updateTime" />
+    <result column="sequence" jdbcType="BIGINT" property="sequence" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, app_id, from_id, to_id, remark, read_status, add_source, add_wording, approve_status, 
+    create_time, update_time, `sequence`
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from im_friendship_request
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="queryOneReqest" resultType="com.xcpowernode.im.service.friendship.entity.ImFriendshipRequest">
+    select
+        <include refid="Base_Column_List"/>
+    from im_friendship_request
+    where app_id = #{appId} and from_id = #{fromId} and to_id = #{toId}
+  </select>
+  <select id="queryFriendRequestList"
+          resultType="com.xcpowernode.im.service.friendship.entity.ImFriendshipRequest">
+    select
+        <include refid="Base_Column_List"/>
+        from im_friendship_request
+    where app_id = #{appId} and to_id = #{toId}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from im_friendship_request
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xcpowernode.im.service.friendship.entity.ImFriendshipRequest" useGeneratedKeys="true">
+    insert into im_friendship_request (app_id, from_id, to_id, 
+      remark, read_status, add_source, 
+      add_wording, approve_status, create_time, 
+      update_time, `sequence`)
+    values (#{appId,jdbcType=INTEGER}, #{fromId,jdbcType=VARCHAR}, #{toId,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{readStatus,jdbcType=INTEGER}, #{addSource,jdbcType=VARCHAR}, 
+      #{addWording,jdbcType=VARCHAR}, #{approveStatus,jdbcType=INTEGER}, #{createTime,jdbcType=BIGINT}, 
+      #{updateTime,jdbcType=BIGINT}, #{sequence,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.xcpowernode.im.service.friendship.entity.ImFriendshipRequest" useGeneratedKeys="true">
+    insert into im_friendship_request
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="appId != null">
+        app_id,
+      </if>
+      <if test="fromId != null">
+        from_id,
+      </if>
+      <if test="toId != null">
+        to_id,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="readStatus != null">
+        read_status,
+      </if>
+      <if test="addSource != null">
+        add_source,
+      </if>
+      <if test="addWording != null">
+        add_wording,
+      </if>
+      <if test="approveStatus != null">
+        approve_status,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="sequence != null">
+        `sequence`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="appId != null">
+        #{appId,jdbcType=INTEGER},
+      </if>
+      <if test="fromId != null">
+        #{fromId,jdbcType=VARCHAR},
+      </if>
+      <if test="toId != null">
+        #{toId,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="readStatus != null">
+        #{readStatus,jdbcType=INTEGER},
+      </if>
+      <if test="addSource != null">
+        #{addSource,jdbcType=VARCHAR},
+      </if>
+      <if test="addWording != null">
+        #{addWording,jdbcType=VARCHAR},
+      </if>
+      <if test="approveStatus != null">
+        #{approveStatus,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=BIGINT},
+      </if>
+      <if test="sequence != null">
+        #{sequence,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xcpowernode.im.service.friendship.entity.ImFriendshipRequest">
+    update im_friendship_request
+    <set>
+      <if test="appId != null">
+        app_id = #{appId,jdbcType=INTEGER},
+      </if>
+      <if test="fromId != null">
+        from_id = #{fromId,jdbcType=VARCHAR},
+      </if>
+      <if test="toId != null">
+        to_id = #{toId,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="readStatus != null">
+        read_status = #{readStatus,jdbcType=INTEGER},
+      </if>
+      <if test="addSource != null">
+        add_source = #{addSource,jdbcType=VARCHAR},
+      </if>
+      <if test="addWording != null">
+        add_wording = #{addWording,jdbcType=VARCHAR},
+      </if>
+      <if test="approveStatus != null">
+        approve_status = #{approveStatus,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=BIGINT},
+      </if>
+      <if test="sequence != null">
+        `sequence` = #{sequence,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xcpowernode.im.service.friendship.entity.ImFriendshipRequest">
+    update im_friendship_request
+    set app_id = #{appId,jdbcType=INTEGER},
+      from_id = #{fromId,jdbcType=VARCHAR},
+      to_id = #{toId,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      read_status = #{readStatus,jdbcType=INTEGER},
+      add_source = #{addSource,jdbcType=VARCHAR},
+      add_wording = #{addWording,jdbcType=VARCHAR},
+      approve_status = #{approveStatus,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=BIGINT},
+      update_time = #{updateTime,jdbcType=BIGINT},
+      `sequence` = #{sequence,jdbcType=BIGINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateReadStatus">
+    update im_friendship_request
+    set read_status = #{readStatus,jdbcType=INTEGER}
+    where app_id = #{appId} and to_id = #{toId}
+  </update>
+</mapper>

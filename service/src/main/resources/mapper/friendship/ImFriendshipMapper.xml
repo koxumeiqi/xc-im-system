@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xcpowernode.im.service.friendship.dao.ImFriendshipMapper">
+  <resultMap id="BaseResultMap" type="com.xcpowernode.im.service.friendship.entity.ImFriendship">
+    <id column="app_id" jdbcType="INTEGER" property="appId" />
+    <id column="from_id" jdbcType="VARCHAR" property="fromId" />
+    <id column="to_id" jdbcType="VARCHAR" property="toId" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="black" jdbcType="INTEGER" property="black" />
+    <result column="create_time" jdbcType="BIGINT" property="createTime" />
+    <result column="friend_sequence" jdbcType="BIGINT" property="friendSequence" />
+    <result column="black_sequence" jdbcType="BIGINT" property="blackSequence" />
+    <result column="add_source" jdbcType="VARCHAR" property="addSource" />
+    <result column="extra" jdbcType="VARCHAR" property="extra" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    app_id, from_id, to_id, remark, `status`, black, create_time, friend_sequence, black_sequence, 
+    add_source, extra
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="com.xcpowernode.im.service.friendship.entity.ImFriendshipKey" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from im_friendship
+    where app_id = #{appId,jdbcType=INTEGER}
+      and from_id = #{fromId,jdbcType=VARCHAR}
+      and to_id = #{toId,jdbcType=VARCHAR}
+  </select>
+  <select id="queryAllNormalFriend" resultType="com.xcpowernode.im.service.friendship.entity.ImFriendship">
+    select
+    <include refid="Base_Column_List" />
+    from im_friendship
+    where app_id = #{appId,jdbcType=INTEGER}
+    and from_id = #{fromId,jdbcType=VARCHAR}
+    and status = #{status,jdbcType=INTEGER}
+  </select>
+  <select id="queryOneNormalFriend" resultType="com.xcpowernode.im.service.friendship.entity.ImFriendship">
+    select
+    <include refid="Base_Column_List" />
+    from im_friendship
+    where app_id = #{appId,jdbcType=INTEGER}
+    and from_id = #{fromId,jdbcType=VARCHAR}
+    and status = #{status,jdbcType=INTEGER}
+    and to_id = #{toId}
+  </select>
+  <select id="checkFriendShip"
+          resultType="com.xcpowernode.im.service.friendship.model.resp.CheckFriendShipResp">
+      select from_id,to_id,if(status=1,1,0) as status from im_friendship
+      where from_id = #{req.fromId}
+      and app_id = #{req.appId}
+      and to_id
+      <foreach collection="req.toIds" separator="," open="in (" close=")" item="toId">
+          #{toId}
+      </foreach>
+  </select>
+  <select id="checkFriendShipBoth"
+          resultType="com.xcpowernode.im.service.friendship.model.resp.CheckFriendShipResp">
+    select a.fromId,a.toId , (
+    case
+    when a.status = 1 and b.status = 1 then 1
+    when a.status = 1 and b.status != 1 then 2
+    when a.status != 1 and b.status = 1 then 3
+    when a.status != 1 and b.status != 1 then 4
+    end
+    )
+    as status from
+    (select from_id AS fromId , to_id AS toId , if(status = 1,1,0) as status from im_friendship where app_id = #{appId} and from_id = #{fromId} AND to_id in
+    <foreach collection='toIds' index='index' item='id' separator=',' close=')' open='('>
+     #{id}
+    </foreach>
+     ) as a INNER join
+     (select from_id AS fromId, to_id AS toId , if(status = 1,1,0) as status from im_friendship where app_id = #{appId} and to_id = #{fromId} AND from_id in
+    <foreach collection='toIds' index='index' item='id' separator=',' close=')' open='('>
+     #{id}
+    </foreach>
+     ) as b
+     on a.fromId = b.toId AND b.fromId = a.toId
+  </select>
+  <select id="checkFriendShipBlack"
+          resultType="com.xcpowernode.im.service.friendship.model.resp.CheckFriendShipResp">
+    select from_id,to_id,if(black=1,1,0) as status from im_friendship
+    where from_id = #{fromId}
+    and app_id = #{appId}
+    and to_id
+    <foreach collection="toIds" separator="," open="in (" close=")" item="toId">
+      #{toId}
+    </foreach>
+  </select>
+  <select id="checkFriendShipBlackBoth"
+          resultType="com.xcpowernode.im.service.friendship.model.resp.CheckFriendShipResp">
+    select a.fromId,a.toId , (
+    case
+    when a.black = 1 and b.black = 1 then 1
+    when a.black = 1 and b.black != 1 then 2
+    when a.black != 1 and b.black = 1 then 3
+    when a.black != 1 and b.black != 1 then 4
+    end
+    )
+    as status from
+    (select from_id AS fromId , to_id AS toId , if(black = 1,1,0) as black from im_friendship where app_id = #{appId} and from_id = #{fromId} AND to_id in
+    <foreach collection='toIds' index='index' item='id' separator=',' close=')' open='('>
+      #{id}
+    </foreach>
+    ) as a INNER join
+    (select from_id AS fromId, to_id AS toId , if(black = 1,1,0) as black from im_friendship where app_id = #{appId} and to_id = #{fromId} AND from_id in
+    <foreach collection='toIds' index='index' item='id' separator=',' close=')' open='('>
+      #{id}
+    </foreach>
+    ) as b
+    on a.fromId = b.toId AND b.fromId = a.toId
+  </select>
+
+
+    <select id="syncFriendshipList"
+            resultType="com.xcpowernode.im.service.friendship.entity.ImFriendship">
+        select *
+        from im_friendship
+        where app_id = #{appId}
+          and from_id = #{operator}
+          and friend_sequence
+            > #{lastSequence}
+        order by friend_sequence asc
+            limit #{maxLimit}
+    </select>
+
+
+    <delete id="deleteByPrimaryKey" parameterType="com.xcpowernode.im.service.friendship.entity.ImFriendshipKey">
+    delete from im_friendship
+    where app_id = #{appId,jdbcType=INTEGER}
+      and from_id = #{fromId,jdbcType=VARCHAR}
+      and to_id = #{toId,jdbcType=VARCHAR}
+  </delete>
+  <update id="deleteAll">
+    update im_friendship
+    <set>
+      <if test="updateStatus != null">
+        `status` = #{updateStatus,jdbcType=INTEGER},
+      </if>
+    </set>
+    where app_id = #{imFriendship.appId,jdbcType=INTEGER}
+    and from_id = #{imFriendship.fromId,jdbcType=VARCHAR}
+    and status = #{imFriendship.status}
+  </update>
+  <insert id="insert" parameterType="com.xcpowernode.im.service.friendship.entity.ImFriendship" useGeneratedKeys="true">
+    insert into im_friendship (app_id,from_id, to_id, remark,
+      `status`, black, create_time, 
+      friend_sequence, black_sequence, add_source, 
+      extra)
+    values (#{appId},#{fromId,jdbcType=VARCHAR}, #{toId,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR},
+      #{status,jdbcType=INTEGER}, #{black,jdbcType=INTEGER}, #{createTime,jdbcType=BIGINT}, 
+      #{friendSequence,jdbcType=BIGINT}, #{blackSequence,jdbcType=BIGINT}, #{addSource,jdbcType=VARCHAR}, 
+      #{extra,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xcpowernode.im.service.friendship.entity.ImFriendship" useGeneratedKeys="true">
+    insert into im_friendship
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="appId!=null">
+          app_id,
+        </if>
+      <if test="fromId != null">
+        from_id,
+      </if>
+      <if test="toId != null">
+        to_id,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="black != null">
+        black,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="friendSequence != null">
+        friend_sequence,
+      </if>
+      <if test="blackSequence != null">
+        black_sequence,
+      </if>
+      <if test="addSource != null">
+        add_source,
+      </if>
+      <if test="extra != null">
+        extra,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="appId!=null">
+          #{appId},
+        </if>
+      <if test="fromId != null">
+        #{fromId,jdbcType=VARCHAR},
+      </if>
+      <if test="toId != null">
+        #{toId,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="black != null">
+        #{black,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=BIGINT},
+      </if>
+      <if test="friendSequence != null">
+        #{friendSequence,jdbcType=BIGINT},
+      </if>
+      <if test="blackSequence != null">
+        #{blackSequence,jdbcType=BIGINT},
+      </if>
+      <if test="addSource != null">
+        #{addSource,jdbcType=VARCHAR},
+      </if>
+      <if test="extra != null">
+        #{extra,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xcpowernode.im.service.friendship.entity.ImFriendship">
+    update im_friendship
+    <set>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="black != null">
+        black = #{black,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=BIGINT},
+      </if>
+      <if test="friendSequence != null">
+        friend_sequence = #{friendSequence,jdbcType=BIGINT},
+      </if>
+      <if test="blackSequence != null">
+        black_sequence = #{blackSequence,jdbcType=BIGINT},
+      </if>
+      <if test="addSource != null">
+        add_source = #{addSource,jdbcType=VARCHAR},
+      </if>
+      <if test="extra != null">
+        extra = #{extra,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where app_id = #{appId,jdbcType=INTEGER}
+      and from_id = #{fromId,jdbcType=VARCHAR}
+      and to_id = #{toId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xcpowernode.im.service.friendship.entity.ImFriendship">
+    update im_friendship
+    set remark = #{remark,jdbcType=VARCHAR},
+      `status` = #{status,jdbcType=INTEGER},
+      black = #{black,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=BIGINT},
+      friend_sequence = #{friendSequence,jdbcType=BIGINT},
+      black_sequence = #{blackSequence,jdbcType=BIGINT},
+      add_source = #{addSource,jdbcType=VARCHAR},
+      extra = #{extra,jdbcType=VARCHAR}
+    where app_id = #{appId,jdbcType=INTEGER}
+      and from_id = #{fromId,jdbcType=VARCHAR}
+      and to_id = #{toId,jdbcType=VARCHAR}
+  </update>
+</mapper>

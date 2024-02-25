@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xcpowernode.im.service.friendship.dao.ImFriendshipGroupMemberMapper">
+  <resultMap id="BaseResultMap" type="com.xcpowernode.im.service.friendship.entity.ImFriendshipGroupMemberKey">
+    <id column="group_id" jdbcType="BIGINT" property="groupId" />
+    <id column="to_id" jdbcType="VARCHAR" property="toId" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="com.xcpowernode.im.service.friendship.entity.ImFriendshipGroupMemberKey">
+    delete from im_friendship_group_member
+    where group_id = #{groupId,jdbcType=BIGINT}
+      and to_id = #{toId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByGroupId">
+    delete from im_friendship_group_member
+    where group_id = #{groupId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xcpowernode.im.service.friendship.entity.ImFriendshipGroupMemberKey" useGeneratedKeys="true">
+    insert into im_friendship_group_member (group_id,to_id)
+    values (#{groupId},#{toId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="group_id" keyProperty="groupId" parameterType="com.xcpowernode.im.service.friendship.entity.ImFriendshipGroupMemberKey" useGeneratedKeys="true">
+    insert into im_friendship_group_member
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="toId != null">
+        to_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="toId != null">
+        #{toId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>

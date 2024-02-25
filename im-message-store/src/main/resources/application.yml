@@ -1,0 +1,28 @@
+server:
+  port: 8181
+# datasource
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost:3306/im-core?characterEncoding=UTF8
+  # redis
+  redis:
+    port: 6379
+    host: 192.168.248.143
+    password: "031119"
+
+  # rabbitmq
+  rabbitmq:
+    username: admin
+    password: 123456
+    host: 192.168.248.143
+    port: 5672
+    virtual-host: /ems
+
+# mybatis
+mybatis:
+  mapper-locations: classpath:message/*.xml
+  config-location: classpath:mybatis-config.xml
+  type-aliases-package: org.example.message.store.**.entity

@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xcpowernode.im.service.group.dao.ImGroupMemberMapper">
+  <resultMap id="BaseResultMap" type="com.xcpowernode.im.service.group.entity.ImGroupMember">
+    <id column="group_member_id" jdbcType="BIGINT" property="groupMemberId" />
+    <result column="group_id" jdbcType="VARCHAR" property="groupId" />
+    <result column="app_id" jdbcType="INTEGER" property="appId" />
+    <result column="member_id" jdbcType="VARCHAR" property="memberId" />
+    <result column="role" jdbcType="INTEGER" property="role" />
+    <result column="speak_date" jdbcType="BIGINT" property="speakDate" />
+    <result column="mute" jdbcType="INTEGER" property="mute" />
+    <result column="alias" jdbcType="VARCHAR" property="alias" />
+    <result column="join_time" jdbcType="BIGINT" property="joinTime" />
+    <result column="leave_time" jdbcType="BIGINT" property="leaveTime" />
+    <result column="join_type" jdbcType="VARCHAR" property="joinType" />
+    <result column="extra" jdbcType="VARCHAR" property="extra" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    group_member_id, group_id, app_id, member_id, `role`, speak_date, mute, `alias`, 
+    join_time, leave_time, join_type, extra
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from im_group_member
+    where group_member_id = #{groupMemberId,jdbcType=BIGINT}
+  </select>
+    <select id="selectOne" resultType="com.xcpowernode.im.service.group.entity.ImGroupMember">
+      select
+          <include refid="Base_Column_List"/>
+          from im_group_member
+      <where>
+      and app_id = #{appId}
+      and group_id = #{groupId}
+        <if test="role!=null and role!=''">
+            and role = #{role}
+        </if>
+      <if test="memberId!=null and memberId!=''">
+        and member_id = #{memberId}
+      </if>
+      </where>
+    </select>
+  <select id="selectCount" resultType="java.lang.Integer">
+    select
+    count(*)
+    from im_group_member
+    <where>
+      and app_id = #{appId}
+      and group_id = #{groupId}
+      <if test="role!=null and role!=''">
+        and role = #{role}
+      </if>
+    </where>
+  </select>
+  <select id="selectAllGroupMember" resultType="com.xcpowernode.im.service.group.entity.ImGroupMember">
+    select
+        <include refid="Base_Column_List"/>
+        from im_group_member
+    where app_id = #{appId} and group_id = #{groupId}
+  </select>
+  <select id="selectJoinedGroup" resultType="com.xcpowernode.im.service.group.entity.ImGroupMember">
+    select
+    <include refid="Base_Column_List"/>
+    from im_group_member
+    where app_id = #{appId} and member_id = #{memberId}
+  </select>
+
+  <select id="getJoinedGroupId" resultType="java.lang.String">
+    select group_id from im_group_member where app_id = #{appId} AND member_id = #{memberId}
+  </select>
+
+  <select id="getGroupMemberId" resultType="java.lang.String">
+    select
+            member_id
+            from im_group_member
+            where app_id = #{appId} AND group_id = #{groupId} and role != 3
+  </select>
+  <select id="getGroupManager" resultType="com.xcpowernode.im.service.group.model.req.GroupMemberDto">
+    select
+             member_id,
+             role
+             from im_group_member where app_id = #{appId}
+                                    AND group_id = #{groupId}
+                                    and role in (1,2)
+  </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from im_group_member
+    where group_member_id = #{groupMemberId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" keyColumn="group_member_id" keyProperty="groupMemberId" parameterType="com.xcpowernode.im.service.group.entity.ImGroupMember" useGeneratedKeys="true">
+    insert into im_group_member (group_id, app_id, member_id, 
+      `role`, speak_date, mute, 
+      `alias`, join_time, leave_time, 
+      join_type, extra)
+    values (#{groupId,jdbcType=VARCHAR}, #{appId,jdbcType=INTEGER}, #{memberId,jdbcType=VARCHAR}, 
+      #{role,jdbcType=INTEGER}, #{speakDate,jdbcType=BIGINT}, #{mute,jdbcType=INTEGER}, 
+      #{alias,jdbcType=VARCHAR}, #{joinTime,jdbcType=BIGINT}, #{leaveTime,jdbcType=BIGINT}, 
+      #{joinType,jdbcType=VARCHAR}, #{extra,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="group_member_id" keyProperty="groupMemberId" parameterType="com.xcpowernode.im.service.group.entity.ImGroupMember" useGeneratedKeys="true">
+    insert into im_group_member
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="groupId != null">
+        group_id,
+      </if>
+      <if test="appId != null">
+        app_id,
+      </if>
+      <if test="memberId != null">
+        member_id,
+      </if>
+      <if test="role != null">
+        `role`,
+      </if>
+      <if test="speakDate != null">
+        speak_date,
+      </if>
+      <if test="mute != null">
+        mute,
+      </if>
+      <if test="alias != null">
+        `alias`,
+      </if>
+      <if test="joinTime != null">
+        join_time,
+      </if>
+      <if test="leaveTime != null">
+        leave_time,
+      </if>
+      <if test="joinType != null">
+        join_type,
+      </if>
+      <if test="extra != null">
+        extra,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="groupId != null">
+        #{groupId,jdbcType=VARCHAR},
+      </if>
+      <if test="appId != null">
+        #{appId,jdbcType=INTEGER},
+      </if>
+      <if test="memberId != null">
+        #{memberId,jdbcType=VARCHAR},
+      </if>
+      <if test="role != null">
+        #{role,jdbcType=INTEGER},
+      </if>
+      <if test="speakDate != null">
+        #{speakDate,jdbcType=BIGINT},
+      </if>
+      <if test="mute != null">
+        #{mute,jdbcType=INTEGER},
+      </if>
+      <if test="alias != null">
+        #{alias,jdbcType=VARCHAR},
+      </if>
+      <if test="joinTime != null">
+        #{joinTime,jdbcType=BIGINT},
+      </if>
+      <if test="leaveTime != null">
+        #{leaveTime,jdbcType=BIGINT},
+      </if>
+      <if test="joinType != null">
+        #{joinType,jdbcType=VARCHAR},
+      </if>
+      <if test="extra != null">
+        #{extra,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xcpowernode.im.service.group.entity.ImGroupMember">
+    update im_group_member
+    <set>
+      <if test="memberId != null">
+        member_id = #{memberId,jdbcType=VARCHAR},
+      </if>
+      <if test="role != null">
+        `role` = #{role,jdbcType=INTEGER},
+      </if>
+      <if test="speakDate != null">
+        speak_date = #{speakDate,jdbcType=BIGINT},
+      </if>
+      <if test="mute != null">
+        mute = #{mute,jdbcType=INTEGER},
+      </if>
+      <if test="alias != null">
+        `alias` = #{alias,jdbcType=VARCHAR},
+      </if>
+      <if test="joinTime != null">
+        join_time = #{joinTime,jdbcType=BIGINT},
+      </if>
+      <if test="leaveTime != null">
+        leave_time = #{leaveTime,jdbcType=BIGINT},
+      </if>
+      <if test="joinType != null">
+        join_type = #{joinType,jdbcType=VARCHAR},
+      </if>
+      <if test="extra != null">
+        extra = #{extra,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where group_member_id = #{groupMemberId,jdbcType=BIGINT} and app_id = #{appId}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xcpowernode.im.service.group.entity.ImGroupMember">
+    update im_group_member
+    set group_id = #{groupId,jdbcType=VARCHAR},
+      app_id = #{appId,jdbcType=INTEGER},
+      member_id = #{memberId,jdbcType=VARCHAR},
+      `role` = #{role,jdbcType=INTEGER},
+      speak_date = #{speakDate,jdbcType=BIGINT},
+      mute = #{mute,jdbcType=INTEGER},
+      `alias` = #{alias,jdbcType=VARCHAR},
+      join_time = #{joinTime,jdbcType=BIGINT},
+      leave_time = #{leaveTime,jdbcType=BIGINT},
+      join_type = #{joinType,jdbcType=VARCHAR},
+      extra = #{extra,jdbcType=VARCHAR}
+    where group_member_id = #{groupMemberId,jdbcType=BIGINT}
+  </update>
+  <update id="updateOwnerRole">
+      update im_group_member
+      <set>
+          <if test="updateRole != null">
+              `role` = #{updateRole,jdbcType=INTEGER},
+          </if>
+      </set>
+      where group_id = #{groupId} and app_id = #{appId}
+      and role = #{ordinaryRole}
+  </update>
+  <update id="updateMemberRole">
+      update im_group_member
+      <set>
+          <if test="updateRole != null">
+              `role` = #{updateRole,jdbcType=INTEGER},
+          </if>
+      </set>
+      where app_id = #{appId}
+      and member_id = #{memberId}
+      and group_id = #{groupId}
+  </update>
+  <update id="updateGroupMemberInfo">
+    update im_group_member
+    <set>
+      <if test="role != null">
+        role = #{role}
+      </if>
+      <if test="alias != null">
+        alias = #{alias}
+      </if>
+      <if test="extra != null">
+        extra = #{extra}
+      </if>
+    </set>
+    where app_id = #{appId}
+    and member_id = #{memberId}
+    and group_id = #{groupId}
+  </update>
+</mapper>

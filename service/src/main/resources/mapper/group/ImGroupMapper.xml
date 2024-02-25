@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xcpowernode.im.service.group.dao.ImGroupMapper">
+    <resultMap id="BaseResultMap" type="com.xcpowernode.im.service.group.entity.ImGroup">
+        <id column="app_id" jdbcType="INTEGER" property="appId"/>
+        <id column="group_id" jdbcType="VARCHAR" property="groupId"/>
+        <result column="owner_id" jdbcType="VARCHAR" property="ownerId"/>
+        <result column="group_type" jdbcType="INTEGER" property="groupType"/>
+        <result column="group_name" jdbcType="VARCHAR" property="groupName"/>
+        <result column="mute" jdbcType="INTEGER" property="mute"/>
+        <result column="apply_join_type" jdbcType="INTEGER" property="applyJoinType"/>
+        <result column="photo" jdbcType="VARCHAR" property="photo"/>
+        <result column="max_member_count" jdbcType="INTEGER" property="maxMemberCount"/>
+        <result column="introduction" jdbcType="VARCHAR" property="introduction"/>
+        <result column="notification" jdbcType="VARCHAR" property="notification"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="sequence" jdbcType="BIGINT" property="sequence"/>
+        <result column="create_time" jdbcType="BIGINT" property="createTime"/>
+        <result column="extra" jdbcType="VARCHAR" property="extra"/>
+        <result column="update_time" jdbcType="BIGINT" property="updateTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        app_id
+        , group_id, owner_id, group_type, group_name, mute, apply_join_type, photo,
+    max_member_count, introduction, notification, `status`, `sequence`, create_time, 
+    extra, update_time
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="com.xcpowernode.im.service.group.entity.ImGroupKey"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from im_group
+        where app_id = #{group.appId,jdbcType=INTEGER}
+        and group_id = #{group.groupId,jdbcType=VARCHAR}
+        <if test="status!=null">
+            and status = #{status}
+        </if>
+    </select>
+    <select id="selectList" resultType="com.xcpowernode.im.service.group.entity.ImGroup">
+        select
+            <include refid="Base_Column_List"/>
+            from im_group
+        where
+            app_id = #{appId}
+        and group_id in <foreach collection="groupIds" item="groupId" open="(" close=")" separator=",">
+        #{groupId}
+    </foreach>
+        <if test="groupTypes!=null">
+            and group_type in <foreach collection="groupTypes" item="groupType" open="(" close=")" separator=",">
+            #{groupType}
+        </foreach>
+        </if>
+    </select>
+    <select id="syncJoinedGroupList" resultType="com.xcpowernode.im.service.group.entity.ImGroup">
+
+        select *
+        from im_group
+        where app_id = #{req.appId}
+        and group_id
+        <foreach collection="groupIds" open="in (" close=")" separator="," item="groupId">
+            #{groupId}
+        </foreach>
+        and sequence > #{req.lastSequence}
+        order by sequence asc
+        limit #{req.maxLimit}
+
+    </select>
+    <select id="getGroupMaxSeq" resultType="java.lang.Long">
+
+
+        select max(sequence) as max_seq
+        from im_group
+        where app_id = #{appId}
+          and group_id
+        <foreach collection="groupIds" open="in (" close=")" separator="," item="groupId">
+            #{groupId}
+        </foreach>
+
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="com.xcpowernode.im.service.group.entity.ImGroupKey">
+        delete
+        from im_group
+        where app_id = #{appId,jdbcType=INTEGER}
+          and group_id = #{groupId,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" keyColumn="app_id" keyProperty="appId"
+            parameterType="com.xcpowernode.im.service.group.entity.ImGroup" useGeneratedKeys="true">
+        insert into im_group (group_id, owner_id, group_type,
+                              group_name, mute, apply_join_type,
+                              photo, max_member_count, introduction,
+                              notification, `status`, `sequence`,
+                              create_time, extra, update_time)
+        values (#{groupId,jdbcType=VARCHAR}, #{ownerId,jdbcType=VARCHAR}, #{groupType,jdbcType=INTEGER},
+                #{groupName,jdbcType=VARCHAR}, #{mute,jdbcType=INTEGER}, #{applyJoinType,jdbcType=INTEGER},
+                #{photo,jdbcType=VARCHAR}, #{maxMemberCount,jdbcType=INTEGER}, #{introduction,jdbcType=VARCHAR},
+                #{notification,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{sequence,jdbcType=BIGINT},
+                #{createTime,jdbcType=BIGINT}, #{extra,jdbcType=VARCHAR}, #{updateTime,jdbcType=BIGINT})
+    </insert>
+    <insert id="insertSelective" parameterType="com.xcpowernode.im.service.group.entity.ImGroup">
+        insert into im_group
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="appId != null">
+                app_id,
+            </if>
+            <if test="groupId != null">
+                group_id,
+            </if>
+            <if test="ownerId != null">
+                owner_id,
+            </if>
+            <if test="groupType != null">
+                group_type,
+            </if>
+            <if test="groupName != null">
+                group_name,
+            </if>
+            <if test="mute != null">
+                mute,
+            </if>
+            <if test="applyJoinType != null">
+                apply_join_type,
+            </if>
+            <if test="photo != null">
+                photo,
+            </if>
+            <if test="maxMemberCount != null">
+                max_member_count,
+            </if>
+            <if test="introduction != null">
+                introduction,
+            </if>
+            <if test="notification != null">
+                notification,
+            </if>
+            <if test="status != null">
+                `status`,
+            </if>
+            <if test="sequence != null">
+                `sequence`,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="extra != null">
+                extra,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="appId != null">
+                #{appId},
+            </if>
+            <if test="groupId != null">
+                #{groupId,jdbcType=VARCHAR},
+            </if>
+            <if test="ownerId != null">
+                #{ownerId,jdbcType=VARCHAR},
+            </if>
+            <if test="groupType != null">
+                #{groupType,jdbcType=INTEGER},
+            </if>
+            <if test="groupName != null">
+                #{groupName,jdbcType=VARCHAR},
+            </if>
+            <if test="mute != null">
+                #{mute,jdbcType=INTEGER},
+            </if>
+            <if test="applyJoinType != null">
+                #{applyJoinType,jdbcType=INTEGER},
+            </if>
+            <if test="photo != null">
+                #{photo,jdbcType=VARCHAR},
+            </if>
+            <if test="maxMemberCount != null">
+                #{maxMemberCount,jdbcType=INTEGER},
+            </if>
+            <if test="introduction != null">
+                #{introduction,jdbcType=VARCHAR},
+            </if>
+            <if test="notification != null">
+                #{notification,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="sequence != null">
+                #{sequence,jdbcType=BIGINT},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=BIGINT},
+            </if>
+            <if test="extra != null">
+                #{extra,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.xcpowernode.im.service.group.entity.ImGroup">
+        update im_group
+        <set>
+            <if test="ownerId != null">
+                owner_id = #{ownerId,jdbcType=VARCHAR},
+            </if>
+            <if test="groupType != null">
+                group_type = #{groupType,jdbcType=INTEGER},
+            </if>
+            <if test="groupName != null">
+                group_name = #{groupName,jdbcType=VARCHAR},
+            </if>
+            <if test="mute != null">
+                mute = #{mute,jdbcType=INTEGER},
+            </if>
+            <if test="applyJoinType != null">
+                apply_join_type = #{applyJoinType,jdbcType=INTEGER},
+            </if>
+            <if test="photo != null">
+                photo = #{photo,jdbcType=VARCHAR},
+            </if>
+            <if test="maxMemberCount != null">
+                max_member_count = #{maxMemberCount,jdbcType=INTEGER},
+            </if>
+            <if test="introduction != null">
+                introduction = #{introduction,jdbcType=VARCHAR},
+            </if>
+            <if test="notification != null">
+                notification = #{notification,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                `status` = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="sequence != null">
+                `sequence` = #{sequence,jdbcType=BIGINT},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=BIGINT},
+            </if>
+            <if test="extra != null">
+                extra = #{extra,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=BIGINT},
+            </if>
+        </set>
+        where app_id = #{appId,jdbcType=INTEGER}
+        and group_id = #{groupId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.xcpowernode.im.service.group.entity.ImGroup">
+        update im_group
+        set owner_id         = #{ownerId,jdbcType=VARCHAR},
+            group_type       = #{groupType,jdbcType=INTEGER},
+            group_name       = #{groupName,jdbcType=VARCHAR},
+            mute             = #{mute,jdbcType=INTEGER},
+            apply_join_type  = #{applyJoinType,jdbcType=INTEGER},
+            photo            = #{photo,jdbcType=VARCHAR},
+            max_member_count = #{maxMemberCount,jdbcType=INTEGER},
+            introduction     = #{introduction,jdbcType=VARCHAR},
+            notification     = #{notification,jdbcType=VARCHAR},
+            `status`         = #{status,jdbcType=INTEGER},
+            `sequence`       = #{sequence,jdbcType=BIGINT},
+            create_time      = #{createTime,jdbcType=BIGINT},
+            extra            = #{extra,jdbcType=VARCHAR},
+            update_time      = #{updateTime,jdbcType=BIGINT}
+        where app_id = #{appId,jdbcType=INTEGER}
+          and group_id = #{groupId,jdbcType=VARCHAR}
+    </update>
+</mapper>

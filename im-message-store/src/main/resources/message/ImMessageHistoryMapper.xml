@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.message.store.dao.ImMessageHistoryMapper">
+  <resultMap id="BaseResultMap" type="org.example.message.store.entity.ImMessageHistory">
+    <id column="app_id" jdbcType="INTEGER" property="appId" />
+    <id column="owner_id" jdbcType="VARCHAR" property="ownerId" />
+    <id column="message_key" jdbcType="BIGINT" property="messageKey" />
+    <result column="from_id" jdbcType="VARCHAR" property="fromId" />
+    <result column="to_id" jdbcType="VARCHAR" property="toId" />
+    <result column="create_time" jdbcType="BIGINT" property="createTime" />
+    <result column="sequence" jdbcType="BIGINT" property="sequence" />
+    <result column="message_random" jdbcType="INTEGER" property="messageRandom" />
+    <result column="message_time" jdbcType="BIGINT" property="messageTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    app_id, owner_id, message_key, from_id, to_id, create_time, `sequence`, message_random, 
+    message_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="org.example.message.store.entity.ImMessageHistoryKey" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from im_message_history
+    where app_id = #{appId,jdbcType=INTEGER}
+      and owner_id = #{ownerId,jdbcType=VARCHAR}
+      and message_key = #{messageKey,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="org.example.message.store.entity.ImMessageHistoryKey">
+    delete from im_message_history
+    where app_id = #{appId,jdbcType=INTEGER}
+      and owner_id = #{ownerId,jdbcType=VARCHAR}
+      and message_key = #{messageKey,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="org.example.message.store.entity.ImMessageHistory">
+    insert into im_message_history (app_id,owner_id, message_key, from_id,
+      to_id, create_time, `sequence`, 
+      message_random, message_time)
+    values 
+        <foreach collection="records" separator="," item="record" >
+        (#{record.appId},#{record.ownerId,jdbcType=VARCHAR},
+         #{record.messageKey,jdbcType=BIGINT}, #{record.fromId,jdbcType=VARCHAR},
+      #{record.toId,jdbcType=VARCHAR}, #{record.createTime,jdbcType=BIGINT}, #{record.sequence,jdbcType=BIGINT},
+      #{record.messageRandom,jdbcType=INTEGER}, #{record.messageTime,jdbcType=BIGINT})
+        </foreach>
+  </insert>
+  <insert id="insertSelective" keyColumn="app_id" keyProperty="appId" parameterType="org.example.message.store.entity.ImMessageHistory" useGeneratedKeys="true">
+    insert into im_message_history
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="ownerId != null">
+        owner_id,
+      </if>
+      <if test="messageKey != null">
+        message_key,
+      </if>
+      <if test="fromId != null">
+        from_id,
+      </if>
+      <if test="toId != null">
+        to_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="sequence != null">
+        `sequence`,
+      </if>
+      <if test="messageRandom != null">
+        message_random,
+      </if>
+      <if test="messageTime != null">
+        message_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="ownerId != null">
+        #{ownerId,jdbcType=VARCHAR},
+      </if>
+      <if test="messageKey != null">
+        #{messageKey,jdbcType=BIGINT},
+      </if>
+      <if test="fromId != null">
+        #{fromId,jdbcType=VARCHAR},
+      </if>
+      <if test="toId != null">
+        #{toId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=BIGINT},
+      </if>
+      <if test="sequence != null">
+        #{sequence,jdbcType=BIGINT},
+      </if>
+      <if test="messageRandom != null">
+        #{messageRandom,jdbcType=INTEGER},
+      </if>
+      <if test="messageTime != null">
+        #{messageTime,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="org.example.message.store.entity.ImMessageHistory">
+    update im_message_history
+    <set>
+      <if test="fromId != null">
+        from_id = #{fromId,jdbcType=VARCHAR},
+      </if>
+      <if test="toId != null">
+        to_id = #{toId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=BIGINT},
+      </if>
+      <if test="sequence != null">
+        `sequence` = #{sequence,jdbcType=BIGINT},
+      </if>
+      <if test="messageRandom != null">
+        message_random = #{messageRandom,jdbcType=INTEGER},
+      </if>
+      <if test="messageTime != null">
+        message_time = #{messageTime,jdbcType=BIGINT},
+      </if>
+    </set>
+    where app_id = #{appId,jdbcType=INTEGER}
+      and owner_id = #{ownerId,jdbcType=VARCHAR}
+      and message_key = #{messageKey,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="org.example.message.store.entity.ImMessageHistory">
+    update im_message_history
+    set from_id = #{fromId,jdbcType=VARCHAR},
+      to_id = #{toId,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=BIGINT},
+      `sequence` = #{sequence,jdbcType=BIGINT},
+      message_random = #{messageRandom,jdbcType=INTEGER},
+      message_time = #{messageTime,jdbcType=BIGINT}
+    where app_id = #{appId,jdbcType=INTEGER}
+      and owner_id = #{ownerId,jdbcType=VARCHAR}
+      and message_key = #{messageKey,jdbcType=BIGINT}
+  </update>
+</mapper>

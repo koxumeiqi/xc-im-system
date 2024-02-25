@@ -1,0 +1,86 @@
+# datasource
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost:3306/im-core?characterEncoding=UTF8
+  main:
+    allow-circular-references: true
+  devtools:
+    restart:
+      exclude: static #设置class—path下的目录不重启
+      additional-paths: src/main/java #设置重启目录
+      enabled: true # 热部署生效
+  # redis
+  redis:
+    port: 6379
+    host: 192.168.248.143
+    password: "031119"
+  #    jedis:
+#      pool:
+#        max-active: 100
+#        max-idle: 100
+#        max-wait: 1000
+#        min-idle: 10
+  # rabbitmq
+  rabbitmq:
+    username: admin
+    password: 123456
+    host: 192.168.248.143
+    port: 5672
+    virtual-host: /ems
+
+# mybatis
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  config-location: classpath:mybatis-config.xml
+  type-aliases-package: com.xcpowernode.im.service.**.entity
+
+# 分页插件配置
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
+
+# server
+server:
+  port: 8000
+
+appConfig:
+  zkAddr: 192.168.248.143   #  zk 连接地址
+  zkConnectTimeOut: 50000  # zk 超时时间
+  imRouteWay: 3 # 路由策略 1随机 2轮询 3hash
+  sendMessageCheckBlack: true # 发送消息是否校验黑名单
+  sendMessageCheckFriend: true  # 发送消息是否校验关系链
+  consistentHashWay: 1 # 如果选用一致性hash的话具体hash算法 1 TreeMap 2 自定义Map,在RouteHashMethodEnum中配置
+  callbackUrl: http://127.0.0.1:1234/callback
+  modifyUserAfterCallback: false # 用户资料变更之后回调开关
+  addFriendAfterCallback: false # 添加好友之后回调开关
+  addFriendBeforeCallback: false # 添加好友之前回调开关
+  modifyFriendAfterCallback: false # 修改好友之后回调开关
+  deleteFriendAfterCallback: false # 删除好友之后回调开关
+  addFriendShipBlackAfterCallback: false #添加黑名单之后回调开关
+  deleteFriendShipBlackAfterCallback: false #删除黑名单之后回调开关
+  createGroupAfterCallback: false # 创建群聊之后回调开关
+  modifyGroupAfterCallback: false # 修改群聊之后回调开关
+  destroyGroupAfterCallback: false # 解散群聊之后回调开关
+  deleteGroupMemberAfterCallback: false # 删除群成员之后回调
+  addGroupMemberAfterCallback: false # 拉人入群之后回调
+  addGroupMemberBeforeCallback: false # 拉人入群之前回调
+  sendMessageAfterCallback: false # 发送单聊消息之后
+  sendMessageBeforeCallback: false # 发送单聊消息之前
+  sendGroupMessageAfterCallback: false # 发送群聊消息之后
+  sendGroupMessageBeforeCallback: false # 发送群聊消息之前
+  deleteConversationSyncMode: true # 是否多端同步删除会话
+  privateKey: 213213
+  offlineMessageCount: 1000 # 离线消息存储条数
+
+httpclient:
+  maxTotal: 100
+  defaultMaxPerRoute: 50
+  connectTimeout: 2000
+  connectionRequestTimeout: 2000
+  socketTimeout: 5000
+  staleConnectionCheckEnabled: true

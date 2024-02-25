@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xcpowernode.im.service.conversation.dao.ImConversationSetDao">
+  <resultMap id="BaseResultMap" type="com.xcpowernode.im.service.conversation.entity.ImConversationSet">
+    <id column="app_id" jdbcType="INTEGER" property="appId" />
+    <id column="conversation_id" jdbcType="VARCHAR" property="conversationId" />
+    <result column="conversation_type" jdbcType="INTEGER" property="conversationType" />
+    <result column="from_id" jdbcType="VARCHAR" property="fromId" />
+    <result column="to_id" jdbcType="VARCHAR" property="toId" />
+    <result column="is_mute" jdbcType="INTEGER" property="isMute" />
+    <result column="is_top" jdbcType="INTEGER" property="isTop" />
+    <result column="sequence" jdbcType="BIGINT" property="sequence" />
+    <result column="readed_sequence" jdbcType="BIGINT" property="readedSequence" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    app_id, conversation_id, conversation_type, from_id, to_id, is_mute, is_top, `sequence`, 
+    readed_sequence
+  </sql>
+  <update id="updateConversation">
+
+      update im_conversation_set
+      <set>
+          <if test="isMute != null">
+              is_mute = #{isMute},
+          </if>
+          <if test="isTop != null">
+              is_top = #{isTop},
+          </if>
+          <if test="sequence != null">
+              sequence = #{sequence},
+          </if>
+      </set>
+      where
+      app_id = #{appId,jdbcType=INTEGER}
+      and conversation_id = #{conversationId,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="com.xcpowernode.im.service.conversation.entity.ImConversationSetKey" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from im_conversation_set
+    where app_id = #{appId,jdbcType=INTEGER}
+      and conversation_id = #{conversationId,jdbcType=VARCHAR}
+  </select>
+    <select id="syncConversationSet"
+            resultType="com.xcpowernode.im.service.conversation.entity.ImConversationSet">
+
+
+        select *
+        from im_conversation_set
+        where app_id = #{appId}
+          and from_id = #{operator}
+          and sequence > #{lastSequence}
+        order by sequence asc
+            limit #{maxLimit}
+
+
+    </select>
+
+    <insert id="insert" parameterType="com.xcpowernode.im.service.conversation.entity.ImConversationSet" useGeneratedKeys="true">
+    insert into im_conversation_set (conversation_id,app_id, conversation_type, from_id,
+      to_id, is_mute, is_top,
+      `sequence`, readed_sequence)
+    values (#{conversationId},#{appId,jdbcType=INTEGER}, #{conversationType,jdbcType=INTEGER}, #{fromId,jdbcType=VARCHAR},
+      #{toId,jdbcType=VARCHAR}, #{isMute,jdbcType=INTEGER}, #{isTop,jdbcType=INTEGER},
+      #{sequence,jdbcType=BIGINT}, #{readedSequence,jdbcType=BIGINT})
+  </insert>
+
+</mapper>
