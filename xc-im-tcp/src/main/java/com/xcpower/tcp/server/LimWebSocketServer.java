@@ -1,6 +1,5 @@
 package com.xcpower.tcp.server;
 
-import com.sun.org.apache.xml.internal.utils.BoolStack;
 import com.xcpower.codec.WebSocketMessageDecoder;
 import com.xcpower.codec.WebSocketMessageEncoder;
 import com.xcpower.codec.config.BootstrapConfig;

@@ -15,7 +15,7 @@ spring:
   # redis
   redis:
     port: 6379
-    host: 192.168.248.143
+    host: 192.168.181.56
     password: "031119"
   #    jedis:
 #      pool:
@@ -27,7 +27,7 @@ spring:
   rabbitmq:
     username: admin
     password: 123456
-    host: 192.168.248.143
+    host: 192.168.181.56
     port: 5672
     virtual-host: /ems
 
@@ -49,7 +49,7 @@ server:
   port: 8000
 
 appConfig:
-  zkAddr: 192.168.248.143   #  zk 连接地址
+  zkAddr: 192.168.181.56   #  zk 连接地址
   zkConnectTimeOut: 50000  # zk 超时时间
   imRouteWay: 3 # 路由策略 1随机 2轮询 3hash
   sendMessageCheckBlack: true # 发送消息是否校验黑名单

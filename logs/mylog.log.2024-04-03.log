@@ -1,0 +1,46 @@
+2024-04-03 19:13:21 -Starting AppServiceApplication on DESKTOP-CIRJU6P with PID 9996 (D:\Study\xc-im-system\l-im-app-server\target\classes started by myz03 in D:\Study\xc-im-system)
+2024-04-03 19:13:21 -The following profiles are active: dev
+2024-04-03 19:13:22 -Tomcat initialized with port(s): 8989 (http)
+2024-04-03 19:13:22 -Initializing ProtocolHandler ["http-nio-8989"]
+2024-04-03 19:13:22 -Starting service [Tomcat]
+2024-04-03 19:13:22 -Starting Servlet engine: [Apache Tomcat/9.0.37]
+2024-04-03 19:13:22 -Initializing Spring embedded WebApplicationContext
+2024-04-03 19:13:22 -Root WebApplicationContext: initialization completed in 1387 ms
+2024-04-03 19:13:23 -Initializing ExecutorService 'applicationTaskExecutor'
+2024-04-03 19:13:23 -Starting ProtocolHandler ["http-nio-8989"]
+2024-04-03 19:13:24 -Tomcat started on port(s): 8989 (http) with context path ''
+2024-04-03 19:13:24 -Started AppServiceApplication in 3.506 seconds (JVM running for 4.756)
+2024-04-03 19:51:14 -Starting AppServiceApplication on DESKTOP-CIRJU6P with PID 16824 (D:\Study\xc-im-system\l-im-app-server\target\classes started by myz03 in D:\Study\xc-im-system)
+2024-04-03 19:51:14 -The following profiles are active: dev
+2024-04-03 19:51:16 -Tomcat initialized with port(s): 8989 (http)
+2024-04-03 19:51:16 -Initializing ProtocolHandler ["http-nio-8989"]
+2024-04-03 19:51:16 -Starting service [Tomcat]
+2024-04-03 19:51:16 -Starting Servlet engine: [Apache Tomcat/9.0.37]
+2024-04-03 19:51:16 -Initializing Spring embedded WebApplicationContext
+2024-04-03 19:51:16 -Root WebApplicationContext: initialization completed in 1393 ms
+2024-04-03 19:51:17 -Initializing ExecutorService 'applicationTaskExecutor'
+2024-04-03 19:51:17 -Starting ProtocolHandler ["http-nio-8989"]
+2024-04-03 19:51:17 -Tomcat started on port(s): 8989 (http) with context path ''
+2024-04-03 19:51:17 -Started AppServiceApplication in 3.869 seconds (JVM running for 4.71)
+2024-04-03 20:05:41 -Starting AppServiceApplication on DESKTOP-CIRJU6P with PID 16108 (D:\Study\xc-im-system\l-im-app-server\target\classes started by myz03 in D:\Study\xc-im-system)
+2024-04-03 20:05:41 -The following profiles are active: dev
+2024-04-03 21:21:15 -Starting AppServiceApplication on DESKTOP-CIRJU6P with PID 24084 (D:\Study\xc-im-system\l-im-app-server\target\classes started by myz03 in D:\Study\xc-im-system)
+2024-04-03 21:21:15 -The following profiles are active: dev
+2024-04-03 21:21:17 -Tomcat initialized with port(s): 8989 (http)
+2024-04-03 21:21:17 -Initializing ProtocolHandler ["http-nio-8989"]
+2024-04-03 21:21:17 -Starting service [Tomcat]
+2024-04-03 21:21:17 -Starting Servlet engine: [Apache Tomcat/9.0.37]
+2024-04-03 21:21:17 -Initializing Spring embedded WebApplicationContext
+2024-04-03 21:21:17 -Root WebApplicationContext: initialization completed in 1466 ms
+2024-04-03 21:21:17 -Initializing ExecutorService 'applicationTaskExecutor'
+2024-04-03 21:21:18 -Starting ProtocolHandler ["http-nio-8989"]
+2024-04-03 21:21:18 -Tomcat started on port(s): 8989 (http) with context path ''
+2024-04-03 21:21:18 -Started AppServiceApplication in 2.934 seconds (JVM running for 4.517)
+2024-04-03 21:30:19 -Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-04-03 21:30:19 -Initializing Servlet 'dispatcherServlet'
+2024-04-03 21:30:19 -Completed initialization in 6 ms
+2024-04-03 21:30:19 -HikariPool-1 - Starting...
+2024-04-03 21:30:19 -HikariPool-1 - Start completed.
+2024-04-03 21:50:53 -Shutting down ExecutorService 'applicationTaskExecutor'
+2024-04-03 21:50:53 -HikariPool-1 - Shutdown initiated...
+2024-04-03 21:50:53 -HikariPool-1 - Shutdown completed.

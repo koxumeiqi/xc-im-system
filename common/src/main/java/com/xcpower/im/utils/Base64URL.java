@@ -1,6 +1,6 @@
 package com.xcpower.im.utils;
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
+import cn.hutool.core.codec.Base64Decoder;
+import cn.hutool.core.codec.Base64Encoder;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -12,7 +12,7 @@ import java.nio.charset.Charset;
  */
 public class Base64URL {
     public static byte[] base64EncodeUrl(byte[] input) {
-        byte[] base64 = new BASE64Encoder().encode(input).getBytes();
+        byte[] base64 = new Base64Encoder().encode(input).getBytes();
         for (int i = 0; i < base64.length; ++i)
             switch (base64[i]) {
                 case '+':
@@ -31,7 +31,7 @@ public class Base64URL {
     }
 
     public static byte[] base64EncodeUrlNotReplace(byte[] input) {
-        byte[] base64 = new BASE64Encoder().encode(input).getBytes(Charset.forName("UTF-8"));
+        byte[] base64 = new Base64Encoder().encode(input).getBytes(Charset.forName("UTF-8"));
         for (int i = 0; i < base64.length; ++i)
             switch (base64[i]) {
                 case '+':
@@ -64,7 +64,7 @@ public class Base64URL {
                 default:
                     break;
             }
-        return new BASE64Decoder().decodeBuffer(new String(input,"UTF-8"));
+        return Base64Decoder.decodeStr(new String(input,"UTF-8")).getBytes();
     }
 
     public static byte[] base64DecodeUrl(byte[] input) throws IOException {
@@ -83,6 +83,6 @@ public class Base64URL {
                 default:
                     break;
             }
-        return new BASE64Decoder().decodeBuffer(base64.toString());
+        return Base64Decoder.decodeStr(base64.toString()).getBytes();
     }
 }

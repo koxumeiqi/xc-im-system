@@ -12,7 +12,6 @@ import org.I0Itec.zkclient.ZkClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import sun.java2d.pipe.AAShapePipe;
 
 @Configuration
 public class BeanConfig {

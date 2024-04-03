@@ -1,0 +1,5 @@
+/.idea/
+/im-message-store/target/
+/out/
+/l-im-app-server/target/
+/**/target/

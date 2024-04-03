@@ -5,7 +5,6 @@ import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
-import com.sun.org.apache.bcel.internal.generic.ClassGen;
 import com.xcpower.codec.proto.MessagePack;
 import com.xcpower.im.constant.Constants;
 import com.xcpower.tcp.reciver.process.BaseProcess;
